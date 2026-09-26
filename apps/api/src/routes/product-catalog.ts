@@ -17,9 +17,9 @@ const productsQuerySchema = productFiltersSchema.extend({
     order: z.enum(['asc', 'desc']).default('asc'),
 })
 
-export const productsRouter = Router()
+export const productCatalogRouter = Router()
 
-productsRouter.get('/', async (request, response) => {
+productCatalogRouter.get('/products', async (request, response) => {
     const result = productsQuerySchema.safeParse(request.query)
 
     if (!result.success) {

@@ -3,11 +3,11 @@ import { Router } from 'express'
 import { productFiltersSchema } from '../lib/product-filters.js'
 import { createProductReport } from '../reports/products/create-product-report.js'
 import { generateProductReport } from '../reports/products/generate-product-report.js'
-import { getProductReportSummary } from '../reports/products/summary.js'
+import { getProductReportSummary } from '../reports/products/get-product-report-summary.js'
 
-export const reportsRouter = Router()
+export const productReportsRouter = Router()
 
-reportsRouter.get('/products', async (request, response, next) => {
+productReportsRouter.get('/products/pdf', async (request, response, next) => {
     const result = productFiltersSchema.safeParse(request.query)
 
     if (!result.success) {
@@ -19,8 +19,6 @@ reportsRouter.get('/products', async (request, response, next) => {
     try {
         const filters = result.data
         const summary = await getProductReportSummary(filters)
-
-        if (request.aborted || response.destroyed) return
 
         response.setHeader('Content-Type', 'application/pdf')
         response.setHeader(
@@ -35,13 +33,7 @@ reportsRouter.get('/products', async (request, response, next) => {
             document,
             filters,
             summary,
-            isCancelled: () => request.aborted || response.destroyed,
         })
-
-        if (request.aborted || response.destroyed) {
-            document.destroy()
-            return
-        }
 
         document.end()
     } catch (error) {

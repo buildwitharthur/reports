@@ -4,16 +4,19 @@ import {
     productStatusLabels,
     type ProductFilters,
 } from '../../lib/product-filters.js'
-import { drawProductReportFooter } from './footer.js'
-import { drawProductReportHeader } from './header.js'
+import { drawProductReportFooter } from './layout/footer.js'
+import { drawProductReportHeader } from './layout/header.js'
 import {
     drawProductReportEmptyMessage,
     drawProductReportSummary,
     type ProductReportSummary,
-} from './summary.js'
-import { drawProductTableHeader } from './table-header.js'
-import { drawProductTableRow, type ProductReportRow } from './table-row.js'
-import { PAGE_BOTTOM, TABLE_ROW_HEIGHT } from './styles.js'
+} from './layout/summary.js'
+import { drawProductTableHeader } from './layout/table-header.js'
+import {
+    drawProductTableRow,
+    type ProductReportRow,
+} from './layout/table-row.js'
+import { PAGE_BOTTOM, TABLE_ROW_HEIGHT } from './layout/styles.js'
 
 type ProductForReport = {
     sku: string

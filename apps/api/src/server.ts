@@ -5,8 +5,8 @@ import express from 'express'
 
 import { errorHandler } from './middlewares/error-handler.js'
 import { limiter } from './middlewares/rate-limit.js'
-import { productsRouter } from './routes/products.js'
-import { reportsRouter } from './routes/reports.js'
+import { productCatalogRouter } from './routes/product-catalog.js'
+import { productReportsRouter } from './routes/product-reports.js'
 
 const app = express()
 
@@ -28,9 +28,9 @@ app.get('/health', (_request, response) => {
     })
 })
 
-app.use('/products', productsRouter)
+app.use(productCatalogRouter)
 
-app.use('/reports', reportsRouter)
+app.use(productReportsRouter)
 
 app.use(errorHandler)
 

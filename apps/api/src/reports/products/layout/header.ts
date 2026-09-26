@@ -11,7 +11,7 @@ import {
 import {
     describeProductFilters,
     type ProductFilters,
-} from '../../lib/product-filters.js'
+} from '../../../lib/product-filters.js'
 
 function formatGeneratedAt(generatedAt: Date) {
     const formatted = new Intl.DateTimeFormat('pt-BR', {

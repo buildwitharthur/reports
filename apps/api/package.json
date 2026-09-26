@@ -11,8 +11,7 @@
     "db:seed": "prisma db seed",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
-    "db:studio": "prisma studio",
-    "report:sample": "tsx src/reports/products/generate-sample.ts"
+    "db:studio": "prisma studio"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

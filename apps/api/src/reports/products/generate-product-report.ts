@@ -10,7 +10,7 @@ import {
     writeProductReportRows,
     writeProductReportStart,
 } from './create-product-report.js'
-import type { ProductReportSummary } from './summary.js'
+import type { ProductReportSummary } from './layout/summary.js'
 
 const BATCH_SIZE = 500
 
@@ -18,14 +18,12 @@ type GenerateProductReportParams = {
     document: PDFKit.PDFDocument
     filters: ProductFilters
     summary: ProductReportSummary
-    isCancelled: () => boolean
 }
 
 export async function generateProductReport({
     document,
     filters,
     summary,
-    isCancelled,
 }: GenerateProductReportParams) {
     const where = buildProductWhere(filters)
     const generatedAt = new Date()
@@ -39,7 +37,7 @@ export async function generateProductReport({
 
     let cursorId: number | undefined
 
-    while (!isCancelled()) {
+    while (true) {
         const products = await prisma.product.findMany({
             where,
             take: BATCH_SIZE,
@@ -70,7 +68,5 @@ export async function generateProductReport({
         if (products.length < BATCH_SIZE) break
     }
 
-    if (!isCancelled()) {
-        finishProductReport(document, state)
-    }
+    finishProductReport(document, state)
 }

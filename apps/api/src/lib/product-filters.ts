@@ -50,7 +50,8 @@ export function buildProductWhere(
     }
 
     if (filters.category !== 'all') where.category = filters.category
-    if (filters.status !== 'all') where.status = productStatusMap[filters.status]
+    if (filters.status !== 'all')
+        where.status = productStatusMap[filters.status]
     if (filters.inStock === 'true') where.stock = { gt: 0 }
     if (filters.inStock === 'false') where.stock = 0
 
@@ -67,7 +68,9 @@ export function describeProductFilters(filters: ProductFilters) {
         )
     }
     if (filters.status !== 'all') {
-        descriptions.push(`Status: ${productStatusLabels[productStatusMap[filters.status]]}`)
+        descriptions.push(
+            `Status: ${productStatusLabels[productStatusMap[filters.status]]}`,
+        )
     }
     if (filters.inStock !== 'all') {
         descriptions.push(
@@ -75,5 +78,7 @@ export function describeProductFilters(filters: ProductFilters) {
         )
     }
 
-    return descriptions.length > 0 ? descriptions.join(' | ') : 'Todos os produtos'
+    return descriptions.length > 0
+        ? descriptions.join(' | ')
+        : 'Todos os produtos'
 }

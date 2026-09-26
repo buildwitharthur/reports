@@ -8,7 +8,6 @@ build/
 .env.*.local
 
 apps/api/src/generated/prisma/
-apps/api/tmp/
 
 *.log
 npm-debug.log*
