@@ -1,0 +1,13 @@
+{
+    "name": "@reportforge",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "pnpm --recursive --parallel --if-present dev",
+        "build": "pnpm --recursive --if-present build",
+        "dev:api": "pnpm --filter @reportforge/api dev",
+        "dev:web": "pnpm --filter @reportforge/web dev",
+        "build:api": "pnpm --filter @reportforge/api build",
+        "build:web": "pnpm --filter @reportforge/web build"
+    }
+}
