@@ -2,7 +2,10 @@ import { Router } from 'express'
 import { z } from 'zod'
 
 import type { Prisma } from '../generated/prisma/client.js'
-import { buildProductWhere, productFiltersSchema } from '../lib/product-filters.js'
+import {
+    buildProductWhere,
+    productFiltersSchema,
+} from '../lib/product-filters.js'
 import { prisma } from '../lib/prisma.js'
 
 const productsQuerySchema = productFiltersSchema.extend({

@@ -79,7 +79,11 @@ export function writeProductReportRows(
             drawProductReportFooter(document, pageNumber)
             document.addPage()
             pageNumber += 1
-            currentY = drawProductReportHeader(document, state.generatedAt, false)
+            currentY = drawProductReportHeader(
+                document,
+                state.generatedAt,
+                false,
+            )
             currentY = drawProductTableHeader(document, currentY)
         }
 

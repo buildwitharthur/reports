@@ -5,8 +5,8 @@ export function createPdfDocument() {
         size: 'A4',
         margin: 40,
         info: {
-            Title: 'ReportForge',
-            Author: 'ReportForge',
+            Title: 'Relatórios',
+            Author: 'ArthurLabs',
         },
     })
 }
