@@ -1,6 +1,11 @@
 import { createWriteStream, mkdirSync } from 'node:fs'
 
-import { createProductReport, writeProductReport } from './create-product-report.js'
+import {
+    createProductReport,
+    finishProductReport,
+    writeProductReportRows,
+    writeProductReportStart,
+} from './create-product-report.js'
 import type { ProductReportRow } from './table-row.js'
 
 function createSampleProductRows(): ProductReportRow[] {
@@ -32,7 +37,9 @@ const stream = createWriteStream(outputPath)
 const document = createProductReport()
 
 document.pipe(stream)
-writeProductReport(document, createSampleProductRows())
+const startState = writeProductReportStart(document, new Date())
+const finalState = writeProductReportRows(document, createSampleProductRows(), startState)
+finishProductReport(document, finalState)
 document.end()
 
 await new Promise<void>((resolve, reject) => {

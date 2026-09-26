@@ -1,34 +1,19 @@
 import { Router } from 'express'
 
+import { prisma } from '../lib/prisma.js'
 import {
     createProductReport,
-    writeProductReport,
+    finishProductReport,
+    toProductReportRow,
+    writeProductReportRows,
+    writeProductReportStart,
 } from '../reports/products/create-product-report.js'
-import type { ProductReportRow } from '../reports/products/table-row.js'
+
+const BATCH_SIZE = 500
 
 export const reportsRouter = Router()
 
-function createSampleProductRows(): ProductReportRow[] {
-    const categories = ['Monitores', 'Notebooks', 'Teclados', 'Acessórios']
-    const statuses = ['Ativo', 'Inativo', 'Sem estoque']
-
-    return Array.from({ length: 100 }, (_, index) => ({
-        sku: `SKU-${String(index + 1).padStart(6, '0')}`,
-        name:
-            index % 10 === 0
-                ? `Produto de teste com nome propositalmente longo ${index + 1}`
-                : `Produto de teste ${index + 1}`,
-        category: categories[index % categories.length],
-        price: (179_990 + index * 1_000).toLocaleString('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-        }),
-        stock: String((index * 7) % 101),
-        status: statuses[index % statuses.length],
-    }))
-}
-
-reportsRouter.get('/products', (_request, response) => {
+reportsRouter.get('/products', async (request, response, next) => {
     response.setHeader('Content-Type', 'application/pdf')
     response.setHeader(
         'Content-Disposition',
@@ -36,8 +21,73 @@ reportsRouter.get('/products', (_request, response) => {
     )
 
     const document = createProductReport()
-
     document.pipe(response)
-    writeProductReport(document, createSampleProductRows())
-    document.end()
+
+    try {
+        const generatedAt = new Date()
+        let state = writeProductReportStart(document, generatedAt)
+        let cursorId: number | undefined
+        let processed = 0
+
+        console.log('Report started')
+
+        while (!request.aborted && !response.destroyed) {
+            const products = await prisma.product.findMany({
+                take: BATCH_SIZE,
+                ...(cursorId !== undefined
+                    ? {
+                          cursor: {
+                              id: cursorId,
+                          },
+                          skip: 1,
+                      }
+                    : {}),
+                orderBy: {
+                    id: 'asc',
+                },
+                select: {
+                    id: true,
+                    sku: true,
+                    name: true,
+                    category: true,
+                    priceInCents: true,
+                    stock: true,
+                    status: true,
+                },
+            })
+
+            if (products.length === 0) {
+                break
+            }
+
+            const rows = products.map(toProductReportRow)
+            state = writeProductReportRows(document, rows, state)
+            processed += products.length
+            cursorId = products[products.length - 1].id
+
+            console.log(`Processed ${processed} products`)
+
+            if (products.length < BATCH_SIZE) {
+                break
+            }
+        }
+
+        if (request.aborted || response.destroyed) {
+            document.destroy()
+            return
+        }
+
+        finishProductReport(document, state)
+        document.end()
+        console.log('Report completed')
+    } catch (error) {
+        if (!response.headersSent) {
+            next(error)
+            return
+        }
+
+        console.error(error)
+        document.destroy()
+        response.destroy()
+    }
 })
