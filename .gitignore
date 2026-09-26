@@ -7,6 +7,8 @@ build/
 .env.local
 .env.*.local
 
+apps/api/src/generated/prisma/
+
 *.log
 npm-debug.log*
 pnpm-debug.log*

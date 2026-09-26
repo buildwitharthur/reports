@@ -2,7 +2,6 @@ import 'dotenv/config'
 
 import cors from 'cors'
 import express from 'express'
-import { rateLimit } from 'express-rate-limit'
 
 import { errorHandler } from './middlewares/error-handler.js'
 import { limiter } from './middlewares/rate-limit.js'

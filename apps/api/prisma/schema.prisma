@@ -1,0 +1,35 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  runtime             = "nodejs"
+  moduleFormat        = "esm"
+  importFileExtension = "ts"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ProductStatus {
+  ACTIVE
+  INACTIVE
+  OUT_OF_STOCK
+}
+
+model Product {
+  id           Int           @id @default(autoincrement())
+  sku          String        @unique
+  name         String
+  category     String
+  priceInCents Int
+  stock        Int
+  status       ProductStatus @default(ACTIVE)
+  createdAt    DateTime      @default(now())
+
+  @@index([name])
+  @@index([category])
+  @@index([status])
+  @@index([priceInCents])
+  @@index([stock])
+  @@index([createdAt])
+}
