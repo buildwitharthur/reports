@@ -6,6 +6,7 @@ import {
     writeProductReportRows,
     writeProductReportStart,
 } from './create-product-report.js'
+import { productFiltersSchema } from '../../lib/product-filters.js'
 import type { ProductReportRow } from './table-row.js'
 
 function createSampleProductRows(): ProductReportRow[] {
@@ -35,10 +36,23 @@ mkdirSync(outputDirectory, { recursive: true })
 
 const stream = createWriteStream(outputPath)
 const document = createProductReport()
+const sampleRows = createSampleProductRows()
+const sampleFilters = productFiltersSchema.parse({})
+const sampleSummary = {
+    total: sampleRows.length,
+    inStock: sampleRows.filter((row) => row.stock !== '0').length,
+    outOfStock: sampleRows.filter((row) => row.stock === '0').length,
+    stockValueInCents: 0,
+}
 
 document.pipe(stream)
-const startState = writeProductReportStart(document, new Date())
-const finalState = writeProductReportRows(document, createSampleProductRows(), startState)
+const startState = writeProductReportStart(
+    document,
+    new Date(),
+    sampleFilters,
+    sampleSummary,
+)
+const finalState = writeProductReportRows(document, sampleRows, startState)
 finishProductReport(document, finalState)
 document.end()
 

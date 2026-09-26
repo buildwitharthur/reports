@@ -3,7 +3,7 @@ export const PAGE_WIDTH = 595.28
 export const PAGE_HEIGHT = 841.89
 export const CONTENT_WIDTH = PAGE_WIDTH - PAGE_MARGIN * 2
 
-export const HEADER_HEIGHT = 86
+export const HEADER_HEIGHT = 104
 export const COMPACT_HEADER_HEIGHT = 42
 export const FOOTER_HEIGHT = 28
 export const TABLE_HEADER_HEIGHT = 24

@@ -2,28 +2,17 @@ import { Router } from 'express'
 import { z } from 'zod'
 
 import type { Prisma } from '../generated/prisma/client.js'
+import { buildProductWhere, productFiltersSchema } from '../lib/product-filters.js'
 import { prisma } from '../lib/prisma.js'
 
-const productsQuerySchema = z.object({
+const productsQuerySchema = productFiltersSchema.extend({
     page: z.coerce.number().int().min(1).default(1),
     limit: z.coerce.number().int().min(1).max(100).default(50),
-    search: z.string().trim().default(''),
-    category: z.string().trim().default('all'),
-    status: z
-        .enum(['all', 'active', 'inactive', 'out_of_stock'])
-        .default('all'),
-    inStock: z.enum(['all', 'true', 'false']).default('all'),
     sort: z
         .enum(['name', 'price', 'stock', 'recent', 'category'])
         .default('name'),
     order: z.enum(['asc', 'desc']).default('asc'),
 })
-
-const statusMap = {
-    active: 'ACTIVE',
-    inactive: 'INACTIVE',
-    out_of_stock: 'OUT_OF_STOCK',
-} as const
 
 export const productsRouter = Router()
 
@@ -40,42 +29,8 @@ productsRouter.get('/', async (request, response) => {
         result.data
     const skip = (page - 1) * limit
 
-    const where: Prisma.ProductWhereInput = {}
-
-    if (search !== '') {
-        where.OR = [
-            {
-                name: {
-                    contains: search,
-                    mode: 'insensitive',
-                },
-            },
-            {
-                sku: {
-                    contains: search,
-                    mode: 'insensitive',
-                },
-            },
-        ]
-    }
-
-    if (category !== 'all') {
-        where.category = category
-    }
-
-    if (status !== 'all') {
-        where.status = statusMap[status]
-    }
-
-    if (inStock === 'true') {
-        where.stock = {
-            gt: 0,
-        }
-    }
-
-    if (inStock === 'false') {
-        where.stock = 0
-    }
+    const filters = { search, category, status, inStock }
+    const where = buildProductWhere(filters)
 
     const orderBy: Prisma.ProductOrderByWithRelationInput[] = []
 

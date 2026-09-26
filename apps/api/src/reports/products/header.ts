@@ -8,6 +8,11 @@ import {
     PAGE_MARGIN,
 } from './styles.js'
 
+import {
+    describeProductFilters,
+    type ProductFilters,
+} from '../../lib/product-filters.js'
+
 function formatGeneratedAt(generatedAt: Date) {
     const formatted = new Intl.DateTimeFormat('pt-BR', {
         day: '2-digit',
@@ -25,6 +30,7 @@ export function drawProductReportHeader(
     document: PDFKit.PDFDocument,
     generatedAt: Date,
     firstPage: boolean,
+    filters?: ProductFilters,
 ) {
     const title = 'Relatório de Produtos'
 
@@ -45,6 +51,15 @@ export function drawProductReportHeader(
                 PAGE_MARGIN,
                 PAGE_MARGIN + 52,
             )
+
+        if (filters) {
+            document.text(
+                `Filtros: ${describeProductFilters(filters)}`,
+                PAGE_MARGIN,
+                PAGE_MARGIN + 68,
+                { width: 515, lineBreak: false },
+            )
+        }
 
         return PAGE_MARGIN + HEADER_HEIGHT
     }

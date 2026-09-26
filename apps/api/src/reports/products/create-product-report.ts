@@ -1,6 +1,16 @@
 import { createPdfDocument } from '../../lib/pdf.js'
+import {
+    productCategoryLabels,
+    productStatusLabels,
+    type ProductFilters,
+} from '../../lib/product-filters.js'
 import { drawProductReportFooter } from './footer.js'
 import { drawProductReportHeader } from './header.js'
+import {
+    drawProductReportEmptyMessage,
+    drawProductReportSummary,
+    type ProductReportSummary,
+} from './summary.js'
 import { drawProductTableHeader } from './table-header.js'
 import { drawProductTableRow, type ProductReportRow } from './table-row.js'
 import { PAGE_BOTTOM, TABLE_ROW_HEIGHT } from './styles.js'
@@ -20,24 +30,6 @@ export type ProductReportState = {
     generatedAt: Date
 }
 
-const categoryLabels: Record<string, string> = {
-    notebooks: 'Notebooks',
-    monitores: 'Monitores',
-    teclados: 'Teclados',
-    mouses: 'Mouses',
-    headsets: 'Headsets',
-    armazenamento: 'Armazenamento',
-    memoria: 'Memória',
-    'placas-de-video': 'Placas de vídeo',
-    acessorios: 'Acessórios',
-}
-
-const statusLabels: Record<ProductForReport['status'], string> = {
-    ACTIVE: 'Ativo',
-    INACTIVE: 'Inativo',
-    OUT_OF_STOCK: 'Sem estoque',
-}
-
 const currencyFormatter = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
@@ -49,10 +41,10 @@ export function toProductReportRow(
     return {
         sku: product.sku,
         name: product.name,
-        category: categoryLabels[product.category] ?? product.category,
+        category: productCategoryLabels[product.category] ?? product.category,
         price: currencyFormatter.format(product.priceInCents / 100),
         stock: String(product.stock),
-        status: statusLabels[product.status],
+        status: productStatusLabels[product.status],
     }
 }
 
@@ -63,16 +55,15 @@ export function createProductReport() {
 export function writeProductReportStart(
     document: PDFKit.PDFDocument,
     generatedAt: Date,
+    filters: ProductFilters,
+    summary: ProductReportSummary,
 ): ProductReportState {
     const pageNumber = 1
-    let currentY = drawProductReportHeader(document, generatedAt, true)
+    let currentY = drawProductReportHeader(document, generatedAt, true, filters)
+    currentY = drawProductReportSummary(document, summary, currentY)
     currentY = drawProductTableHeader(document, currentY)
 
-    return {
-        currentY,
-        pageNumber,
-        generatedAt,
-    }
+    return { currentY, pageNumber, generatedAt }
 }
 
 export function writeProductReportRows(
@@ -95,11 +86,14 @@ export function writeProductReportRows(
         currentY = drawProductTableRow(document, product, currentY)
     }
 
-    return {
-        currentY,
-        pageNumber,
-        generatedAt: state.generatedAt,
-    }
+    return { currentY, pageNumber, generatedAt: state.generatedAt }
+}
+
+export function writeProductReportEmptyState(
+    document: PDFKit.PDFDocument,
+    state: ProductReportState,
+) {
+    drawProductReportEmptyMessage(document, state.currentY)
 }
 
 export function finishProductReport(
