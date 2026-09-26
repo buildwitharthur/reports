@@ -1,19 +1,34 @@
-import "dotenv/config";
+import 'dotenv/config'
 
-import express from "express";
+import cors from 'cors'
+import express from 'express'
+import { rateLimit } from 'express-rate-limit'
 
-const app = express();
+import { errorHandler } from './middlewares/error-handler.js'
+import { limiter } from './middlewares/rate-limit.js'
 
-app.use(express.json());
+const app = express()
 
-const port = Number(process.env.PORT) || 3333;
+app.use(
+    cors({
+        origin: process.env.WEB_URL ?? 'http://localhost:5173',
+    }),
+)
 
-app.get("/health", (_request, response) => {
-  response.json({
-    status: "ok",
-  });
-});
+app.use(express.json())
+
+app.use(limiter)
+
+const port = Number(process.env.PORT) || 3333
+
+app.get('/health', (_request, response) => {
+    return response.status(200).json({
+        status: 'ok',
+    })
+})
+
+app.use(errorHandler)
 
 app.listen(port, () => {
-  console.log(`HTTP server running on http://localhost:${port}`);
-});
+    console.log(`HTTP server running on http://localhost:${port}`)
+})
