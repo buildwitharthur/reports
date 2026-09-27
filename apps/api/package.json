@@ -9,7 +9,7 @@
         "start": "node dist/server.js",
         "db:generate": "prisma generate",
         "db:seed": "prisma db seed",
-        "db:deploy": "prisma db seed",
+        "db:deploy": "prisma migrate dev",
         "db:push": "prisma db push",
         "db:migrate": "prisma migrate dev",
         "db:studio": "prisma studio"
