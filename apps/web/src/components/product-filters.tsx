@@ -89,12 +89,15 @@ export function ProductFilters({ className }: ProductFiltersProps) {
     const sortValue = `${params.sort}-${params.order}`
 
     const handleSearchChange = (search: string) => {
-        void setParams({
-            search,
-            page: 1,
-        }, {
-            limitUrlUpdates: debounce(400),
-        })
+        setParams(
+            {
+                search,
+                page: 1,
+            },
+            {
+                limitUrlUpdates: debounce(400),
+            },
+        )
     }
 
     return (
