@@ -1,37 +1,37 @@
 {
-  "name": "@reportforge/api",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "tsx --watch src/server.ts",
-    "build": "prisma generate && tsc -p tsconfig.json",
-    "start": "node dist/server.js",
-    "db:generate": "prisma generate",
-    "db:seed": "prisma db seed",
-    "db:push": "prisma db push",
-    "db:migrate": "prisma migrate dev",
-    "db:studio": "prisma studio"
-  },
-  "dependencies": {
-    "@prisma/adapter-pg": "^7.10.0",
-    "@prisma/client": "^7.10.0",
-    "cors": "^2.8.6",
-    "dotenv": "^18.0.4",
-    "express": "^5.2.1",
-    "express-rate-limit": "^8.7.0",
-    "pdfkit": "^0.20.2",
-    "pg": "^8.23.0",
-    "zod": "^4.6.5"
-  },
-  "devDependencies": {
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/node": "^26.6.2",
-    "@types/pdfkit": "^0.17.6",
-    "@types/pg": "^8.23.1",
-    "prisma": "^7.10.0",
-    "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
-  }
+    "name": "@reportforge/api",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "tsx --watch src/server.ts",
+        "build": "prisma migrate deploy && prisma generate && tsc -p tsconfig.json",
+        "start": "node dist/server.js",
+        "db:generate": "prisma generate",
+        "db:seed": "prisma db seed",
+        "db:push": "prisma db push",
+        "db:migrate": "prisma migrate dev",
+        "db:studio": "prisma studio"
+    },
+    "dependencies": {
+        "@prisma/adapter-pg": "^7.10.0",
+        "@prisma/client": "^7.10.0",
+        "cors": "^2.8.6",
+        "dotenv": "^18.0.4",
+        "express": "^5.2.1",
+        "express-rate-limit": "^8.7.0",
+        "pdfkit": "^0.20.2",
+        "pg": "^8.23.0",
+        "zod": "^4.6.5"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.6",
+        "@types/node": "^26.6.2",
+        "@types/pdfkit": "^0.17.6",
+        "@types/pg": "^8.23.1",
+        "prisma": "^7.10.0",
+        "tsx": "^4.23.15",
+        "typescript": "^7.0.2"
+    }
 }
