@@ -79,6 +79,7 @@ export function ProductFilters({ className }: ProductFiltersProps) {
 
             <FilterSelect
                 ariaLabel="Categoria"
+                className="w-fit"
                 options={categoryOptions}
                 value={params.category}
                 onValueChange={(category) => {
@@ -88,6 +89,7 @@ export function ProductFilters({ className }: ProductFiltersProps) {
 
             <FilterSelect
                 ariaLabel="Status"
+                className="w-fit"
                 options={statusOptions}
                 value={params.status}
                 onValueChange={(status) => {
@@ -97,6 +99,7 @@ export function ProductFilters({ className }: ProductFiltersProps) {
 
             <FilterSelect
                 ariaLabel="Estoque"
+                className="w-fit"
                 options={inStockOptions}
                 value={params.inStock}
                 onValueChange={(inStock) => {
@@ -106,6 +109,7 @@ export function ProductFilters({ className }: ProductFiltersProps) {
 
             <FilterSelect
                 ariaLabel="Ordenação"
+                className="w-fit"
                 options={sortOptions}
                 value={sortValue}
                 onValueChange={(selectedValue) => {

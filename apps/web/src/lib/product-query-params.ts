@@ -20,7 +20,7 @@ const orderValues = ['asc', 'desc'] as const
 
 export const productQueryParams = {
     page: parseAsInteger.withDefault(1),
-    limit: parseAsInteger.withDefault(10),
+    limit: parseAsInteger.withDefault(7),
     search: parseAsString.withDefault(''),
     category: parseAsStringLiteral(categoryValues).withDefault('all'),
     status: parseAsStringLiteral(statusValues).withDefault('all'),
