@@ -64,7 +64,7 @@ productReportsRouter.get('/products/pdf', async (request, response) => {
 
     while (true) {
         const { products, hasNextPage, nextCursorId } = await getProductsCursor(
-            500,
+            5000,
             currentCursorId,
             where,
         )

@@ -12,7 +12,7 @@ O ReportForge explora como diferentes operações sobre um conjunto maior de dad
 
 Para visualização, o catálogo é consultado de forma paginada, trazendo apenas os registros necessários para a página atual. O usuário navega pelo conjunto gradualmente, sem receber todos os produtos de uma única vez.
 
-Para geração do relatório, é necessário percorrer todo o conjunto correspondente aos filtros selecionados. Em vez de carregar esses registros de uma vez, a API utiliza paginação baseada em cursor e processa os produtos em lotes de até 500 registros enquanto constrói o PDF.
+Para geração do relatório, é necessário percorrer todo o conjunto correspondente aos filtros selecionados. Em vez de carregar esses registros de uma vez, a API utiliza paginação baseada em cursor e processa os produtos em lotes de até 5000 registros enquanto constrói o PDF.
 
 Dessa forma, o mesmo conjunto de dados é manipulado com estratégias diferentes de acordo com a operação realizada.
 
