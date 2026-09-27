@@ -1,41 +1,11 @@
-import {
-    parseAsInteger,
-    parseAsString,
-    parseAsStringLiteral,
-    debounce,
-    useQueryStates,
-} from 'nuqs'
+import { debounce, useQueryStates } from 'nuqs'
 
+import { productQueryParams } from '../lib/product-query-params'
 import { FilterSelect } from './filter-select'
 import { ProductSearch } from './product-search'
 
-const categoryValues = [
-    'all',
-    'notebooks',
-    'monitores',
-    'teclados',
-    'mouses',
-    'headsets',
-    'armazenamento',
-    'memoria',
-    'placas-de-video',
-    'acessorios',
-] as const
-
-const statusValues = ['all', 'active', 'inactive', 'out_of_stock'] as const
-const inStockValues = ['all', 'true', 'false'] as const
 const sortValues = ['name', 'price', 'stock', 'recent', 'category'] as const
 const orderValues = ['asc', 'desc'] as const
-
-const productParams = {
-    page: parseAsInteger.withDefault(1),
-    search: parseAsString.withDefault(''),
-    category: parseAsStringLiteral(categoryValues).withDefault('all'),
-    status: parseAsStringLiteral(statusValues).withDefault('all'),
-    inStock: parseAsStringLiteral(inStockValues).withDefault('all'),
-    sort: parseAsStringLiteral(sortValues).withDefault('name'),
-    order: parseAsStringLiteral(orderValues).withDefault('asc'),
-}
 
 const categoryOptions = [
     { value: 'all', label: 'Categoria: Todas' },
@@ -81,7 +51,7 @@ type ProductFiltersProps = {
 }
 
 export function ProductFilters({ className }: ProductFiltersProps) {
-    const [params, setParams] = useQueryStates(productParams, {
+    const [params, setParams] = useQueryStates(productQueryParams, {
         history: 'replace',
         clearOnDefault: true,
     })
