@@ -25,9 +25,7 @@ export function FilterSelect<Value extends string>({
             aria-label={ariaLabel}
             className={className}
             value={value}
-            onChange={(event) =>
-                onValueChange(event.target.value as Value)
-            }
+            onChange={(event) => onValueChange(event.target.value as Value)}
         >
             {options.map((option) => (
                 <option key={option.value} value={option.value}>

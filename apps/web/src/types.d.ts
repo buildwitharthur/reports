@@ -1,4 +1,4 @@
- type ProductStatus = 'ACTIVE' | 'INACTIVE' | 'OUT_OF_STOCK'
+type ProductStatus = 'ACTIVE' | 'INACTIVE' | 'OUT_OF_STOCK'
 
 type Product = {
     id: number
@@ -14,9 +14,9 @@ type ProductFilters = {
     search?: string
     category?: string
     status?: 'all' | 'active' | 'inactive' | 'out_of_stock'
-    inStock?: 'all' | 'true' | 'false'
+    inStock?:
+     'all' | 'true' | 'false'
 }
-
 type GetProductsParams = ProductFilters & {
     page?: number
     limit?: number

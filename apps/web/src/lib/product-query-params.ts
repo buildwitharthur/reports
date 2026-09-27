@@ -1,8 +1,4 @@
-import {
-    parseAsInteger,
-    parseAsString,
-    parseAsStringLiteral,
-} from 'nuqs'
+import { parseAsInteger, parseAsString, parseAsStringLiteral } from 'nuqs'
 
 const categoryValues = [
     'all',
@@ -24,7 +20,7 @@ const orderValues = ['asc', 'desc'] as const
 
 export const productQueryParams = {
     page: parseAsInteger.withDefault(1),
-    limit: parseAsInteger.withDefault(50),
+    limit: parseAsInteger.withDefault(10),
     search: parseAsString.withDefault(''),
     category: parseAsStringLiteral(categoryValues).withDefault('all'),
     status: parseAsStringLiteral(statusValues).withDefault('all'),

@@ -2,11 +2,11 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useQueryStates } from 'nuqs'
 
 import { productQueryParams } from '../lib/product-query-params'
-import type { ProductsPagination as ProductsPaginationData } from '../types'
+
 import { IconButton } from './ui/icon-button'
 
 type ProductsPaginationProps = {
-    pagination: ProductsPaginationData
+    pagination: ProductsPagination
     disabled?: boolean
 }
 
@@ -73,7 +73,8 @@ export function ProductsPagination({
             <p className="text-text-muted">
                 Mostrando{' '}
                 <span className="font-medium text-text">
-                    {numberFormatter.format(start)}–{numberFormatter.format(end)}
+                    {numberFormatter.format(start)}–
+                    {numberFormatter.format(end)}
                 </span>{' '}
                 de{' '}
                 <span className="font-medium text-text">
@@ -82,7 +83,10 @@ export function ProductsPagination({
                 produtos
             </p>
 
-            <nav aria-label="Paginação de produtos" className="flex items-center gap-1">
+            <nav
+                aria-label="Paginação de produtos"
+                className="flex items-center gap-1"
+            >
                 <IconButton
                     type="button"
                     aria-label="Página anterior"
@@ -105,7 +109,9 @@ export function ProductsPagination({
                         <button
                             key={page}
                             type="button"
-                            aria-current={page === currentPage ? 'page' : undefined}
+                            aria-current={
+                                page === currentPage ? 'page' : undefined
+                            }
                             disabled={disabled}
                             onClick={() => handlePageChange(page)}
                             className={`grid size-8 place-items-center rounded-sm text-small transition-colors focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-text disabled:cursor-not-allowed ${

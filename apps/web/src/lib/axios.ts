@@ -5,9 +5,10 @@ type ApiErrorResponse = {
 }
 
 const FALLBACK_ERROR_MESSAGE = 'Erro inesperado ao comunicar com a API.'
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3333'
 
 export const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: API_URL,
 })
 
 api.interceptors.response.use(

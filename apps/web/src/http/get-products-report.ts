@@ -1,5 +1,6 @@
 import { api } from '../lib/axios'
-import type { ProductFilters } from '../types'
+
+
 
 export async function getProductsReport(
     filters: ProductFilters,
