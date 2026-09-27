@@ -58,27 +58,4 @@ export function buildProductWhere(
     return where
 }
 
-export function describeProductFilters(filters: ProductFilters) {
-    const descriptions: string[] = []
 
-    if (filters.search !== '') descriptions.push(`Busca: ${filters.search}`)
-    if (filters.category !== 'all') {
-        descriptions.push(
-            `Categoria: ${productCategoryLabels[filters.category] ?? filters.category}`,
-        )
-    }
-    if (filters.status !== 'all') {
-        descriptions.push(
-            `Status: ${productStatusLabels[productStatusMap[filters.status]]}`,
-        )
-    }
-    if (filters.inStock !== 'all') {
-        descriptions.push(
-            `Estoque: ${filters.inStock === 'true' ? 'Com estoque' : 'Sem estoque'}`,
-        )
-    }
-
-    return descriptions.length > 0
-        ? descriptions.join(' | ')
-        : 'Todos os produtos'
-}

@@ -30,10 +30,10 @@ productCatalogRouter.get('/products', async (request, response) => {
 
     const { page, limit, search, category, status, inStock, sort, order } =
         result.data
+
     const skip = (page - 1) * limit
 
-    const filters = { search, category, status, inStock }
-    const where = buildProductWhere(filters)
+    const where = buildProductWhere({ search, category, status, inStock })
 
     const orderBy: Prisma.ProductOrderByWithRelationInput[] = []
 

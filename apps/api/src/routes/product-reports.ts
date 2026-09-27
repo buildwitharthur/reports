@@ -1,13 +1,29 @@
 import { Router } from 'express'
+import PDFDocument from 'pdfkit'
 
-import { productFiltersSchema } from '../lib/product-filters.js'
-import { createProductReport } from '../reports/products/create-product-report.js'
-import { generateProductReport } from '../reports/products/generate-product-report.js'
-import { getProductReportSummary } from '../reports/products/get-product-report-summary.js'
+import {
+    buildProductWhere,
+    productCategoryLabels,
+    productFiltersSchema,
+    productStatusLabels,
+} from '../lib/product-filters.js'
+import { PAGE_MARGIN } from '../constants/report-products-pdf.js'
+
+import {
+    drawFooter,
+    drawHeaderReport,
+    drawProductReportRows,
+} from '../functions/product-report.js'
+import { getProductsCursor } from '../functions/get-products-cursor.js'
+
+const currencyFormatter = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+})
 
 export const productReportsRouter = Router()
 
-productReportsRouter.get('/products/pdf', async (request, response, next) => {
+productReportsRouter.get('/products/pdf', async (request, response) => {
     const result = productFiltersSchema.safeParse(request.query)
 
     if (!result.success) {
@@ -16,32 +32,75 @@ productReportsRouter.get('/products/pdf', async (request, response, next) => {
         })
     }
 
-    try {
-        const filters = result.data
-        const summary = await getProductReportSummary(filters)
+    const where = buildProductWhere(result.data)
 
-        response.setHeader('Content-Type', 'application/pdf')
-        response.setHeader(
-            'Content-Disposition',
-            'inline; filename="products-report.pdf"',
+    response.setHeader('Content-Type', 'application/pdf')
+
+    response.setHeader(
+        'Content-Disposition',
+        'inline; filename="products-report.pdf"',
+    )
+
+    const pdf = new PDFDocument({
+        size: 'A4',
+        margins: {
+            top: PAGE_MARGIN,
+            right: PAGE_MARGIN,
+            bottom: PAGE_MARGIN,
+            left: PAGE_MARGIN,
+        },
+        info: {
+            Title: 'Relatório de Produtos',
+        },
+    })
+
+    pdf.pipe(response)
+
+    let currentCursorId: number | undefined
+
+    // Desenha a estrutura de header base
+
+    let currentReportState = drawHeaderReport(pdf)
+
+    while (true) {
+        const { products, hasNextPage, nextCursorId } = await getProductsCursor(
+            500,
+            currentCursorId,
+            where,
         )
 
-        const document = createProductReport()
-        document.pipe(response)
+        // Não tem produto nenhum para aqui
+        if (products.length === 0) break
 
-        await generateProductReport({
-            document,
-            filters,
-            summary,
+        // Formata os dados para o formato da tabela
+        const rows = products.map((product) => {
+            return {
+                sku: product.sku,
+                name: product.name,
+                category:
+                    productCategoryLabels[product.category] ?? product.category,
+                price: currencyFormatter.format(product.priceInCents / 100),
+                stock: String(product.stock),
+                status: productStatusLabels[product.status],
+            }
         })
 
-        document.end()
-    } catch (error) {
-        if (response.headersSent) {
-            response.destroy()
-            return
-        }
+        // Desenha as linhas das tabela e atualiza o estado de onde parou
 
-        next(error)
+        currentReportState = drawProductReportRows(
+            pdf,
+            rows,
+            currentReportState,
+        )
+
+        // Tem outro lote de processamento? Se não para
+        if (!hasNextPage) break
+
+        // Atualiza a ref do ultimo item para continuar o processamento no while
+        currentCursorId = nextCursorId
     }
+
+    drawFooter(pdf, currentReportState.pageNumber)
+
+    pdf.end()
 })
