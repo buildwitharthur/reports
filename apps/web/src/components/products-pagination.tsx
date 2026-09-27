@@ -2,11 +2,12 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useQueryStates } from 'nuqs'
 
 import { productQueryParams } from '../lib/product-query-params'
+import type { ProductsPagination as ProductsPaginationData } from '../types'
 
 import { IconButton } from './ui/icon-button'
 
 type ProductsPaginationProps = {
-    pagination: ProductsPagination
+    pagination: ProductsPaginationData
     disabled?: boolean
 }
 

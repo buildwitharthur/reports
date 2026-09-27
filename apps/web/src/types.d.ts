@@ -1,6 +1,6 @@
-type ProductStatus = 'ACTIVE' | 'INACTIVE' | 'OUT_OF_STOCK'
+export type ProductStatus = 'ACTIVE' | 'INACTIVE' | 'OUT_OF_STOCK'
 
-type Product = {
+export type Product = {
     id: number
     sku: string
     name: string
@@ -10,28 +10,28 @@ type Product = {
     status: ProductStatus
 }
 
-type ProductFilters = {
+export type ProductFilters = {
     search?: string
     category?: string
     status?: 'all' | 'active' | 'inactive' | 'out_of_stock'
     inStock?:
      'all' | 'true' | 'false'
 }
-type GetProductsParams = ProductFilters & {
+export type GetProductsParams = ProductFilters & {
     page?: number
     limit?: number
     sort?: 'name' | 'price' | 'stock' | 'recent' | 'category'
     order?: 'asc' | 'desc'
 }
 
-type ProductsPagination = {
+export type ProductsPagination = {
     page: number
     limit: number
     total: number
     totalPages: number
 }
 
-type GetProductsResponse = {
+export type GetProductsResponse = {
     data: Product[]
     pagination: ProductsPagination
 }

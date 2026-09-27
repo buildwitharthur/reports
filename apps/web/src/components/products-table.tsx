@@ -1,5 +1,7 @@
 
 
+import type { Product } from '../types'
+
 import { Badge } from './ui/badge'
 
 
