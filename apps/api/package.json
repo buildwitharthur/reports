@@ -5,10 +5,11 @@
     "type": "module",
     "scripts": {
         "dev": "tsx --watch src/server.ts",
-        "build": "prisma migrate deploy && prisma generate && prisma db seed && tsc -p tsconfig.json",
+        "build": "tsc -p tsconfig.json",
         "start": "node dist/server.js",
         "db:generate": "prisma generate",
         "db:seed": "prisma db seed",
+        "db:deploy": "prisma db seed",
         "db:push": "prisma db push",
         "db:migrate": "prisma migrate dev",
         "db:studio": "prisma studio"
