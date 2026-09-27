@@ -15,6 +15,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": false,
+    "types": ["vite/client"],
     "noEmit": true,
     "jsx": "react-jsx"
   },
