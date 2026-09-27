@@ -7,7 +7,9 @@
     --line: #d9ded8;
     --line-strong: #aeb7b1;
     --text: #0d120e;
+    --text-2: #1b251d;
     --text-muted: #56615a;
+    --text-subtle: #828c85;
     --accent-text: #00753a;
     --brand-300: #72fda1;
     --brand-400: #35f27c;
@@ -20,6 +22,13 @@
     --warning: #f5b84b;
     --danger: #ff6577;
     --info: #7da7ff;
+    --tint-success: #defced;
+    --tint-warning: #fef6e8;
+    --tint-neutral: #eff0ef;
+    --tint-danger: #ffebed;
+    --scrim: rgba(3, 5, 4, 0.4);
+    --shadow-focus: 0 0 0 4px rgba(0, 230, 118, 0.18);
+    --shadow-modal: 0 16px 48px rgba(3, 5, 4, 0.16);
     --code-keyword: #00753a;
     --code-string: #8a5a00;
     --code-fn: #2f5bd3;
@@ -86,7 +95,9 @@
         --line: #1b251d;
         --line-strong: #2a352d;
         --text: #f3f5f1;
+        --text-2: #dce3dd;
         --text-muted: #aeb7b1;
+        --text-subtle: #828c85;
         --accent-text: #35f27c;
         --glass: rgba(9, 13, 10, 0.72);
         --glow: rgba(0, 230, 118, 0.35);
@@ -95,6 +106,12 @@
         --code-fn: #7da7ff;
         --code-comment: #aeb7b1;
         --code-highlight: rgba(0, 230, 118, 0.08);
+        --tint-success: #082918;
+        --tint-warning: #282312;
+        --tint-neutral: #191e1a;
+        --tint-danger: #291818;
+        --scrim: rgba(0, 0, 0, 0.6);
+        --shadow-modal: 0 16px 48px rgba(0, 0, 0, 0.6);
         --shadow-card:
             0 1px 0 rgba(255, 255, 255, 0.04) inset,
             0 12px 32px rgba(0, 0, 0, 0.45);
@@ -109,7 +126,9 @@
     --line: #1b251d;
     --line-strong: #2a352d;
     --text: #f3f5f1;
+    --text-2: #dce3dd;
     --text-muted: #aeb7b1;
+    --text-subtle: #828c85;
     --accent-text: #35f27c;
     --glass: rgba(9, 13, 10, 0.72);
     --glow: rgba(0, 230, 118, 0.35);
@@ -118,6 +137,12 @@
     --code-fn: #7da7ff;
     --code-comment: #aeb7b1;
     --code-highlight: rgba(0, 230, 118, 0.08);
+    --tint-success: #082918;
+    --tint-warning: #282312;
+    --tint-neutral: #191e1a;
+    --tint-danger: #291818;
+    --scrim: rgba(0, 0, 0, 0.6);
+    --shadow-modal: 0 16px 48px rgba(0, 0, 0, 0.6);
     --shadow-card:
         0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 12px 32px rgba(0, 0, 0, 0.45);
     color-scheme: dark;
@@ -130,7 +155,9 @@
     --color-line: var(--line);
     --color-line-strong: var(--line-strong);
     --color-text: var(--text);
+    --color-text-2: var(--text-2);
     --color-text-muted: var(--text-muted);
+    --color-text-subtle: var(--text-subtle);
     --color-accent-text: var(--accent-text);
     --color-brand-300: var(--brand-300);
     --color-brand-400: var(--brand-400);
@@ -143,6 +170,11 @@
     --color-warning: var(--warning);
     --color-danger: var(--danger);
     --color-info: var(--info);
+    --color-tint-success: var(--tint-success);
+    --color-tint-warning: var(--tint-warning);
+    --color-tint-neutral: var(--tint-neutral);
+    --color-tint-danger: var(--tint-danger);
+    --color-scrim: var(--scrim);
     --color-code-keyword: var(--code-keyword);
     --color-code-string: var(--code-string);
     --color-code-fn: var(--code-fn);
