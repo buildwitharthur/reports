@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { Footer } from './components/footer'
+import { Header } from './components/header'
 import { Alert } from './components/ui/alert'
 import { Badge } from './components/ui/badge'
 import { Button } from './components/ui/button'
@@ -18,7 +20,10 @@ export function App() {
     const [includeSummary, setIncludeSummary] = useState(true)
 
     return (
-        <main className="min-h-screen bg-bg px-6 py-12 text-text font-sans">
+        <div className="flex min-h-screen flex-col bg-bg text-text font-sans">
+            <Header />
+
+            <main className="mx-auto w-full max-w-[1264px] flex-1 px-4 py-12 md:px-8">
             <div className="mx-auto flex max-w-5xl flex-col gap-10">
                 <header>
                     <p className="text-meta text-text-muted">ReportForge</p>
@@ -174,6 +179,10 @@ export function App() {
                     </div>
                 </div>
             </Dialog>
-        </main>
+
+            </main>
+
+            <Footer />
+        </div>
     )
 }
