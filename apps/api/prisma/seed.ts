@@ -3,7 +3,7 @@ import 'dotenv/config'
 import { ProductStatus } from '../src/generated/prisma/enums.ts'
 import { prisma } from '../src/lib/prisma.ts'
 
-const TOTAL_PRODUCTS = 50_000
+const TOTAL_PRODUCTS = 200_000
 const BATCH_SIZE = 1_000
 const RANDOM_SEED = 2026
 

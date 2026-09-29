@@ -1,5 +1,8 @@
+import { Readable } from 'node:stream'
+import { pipeline } from 'node:stream/promises'
+
+import { stringify } from 'csv-stringify'
 import { Router } from 'express'
-import PDFDocument from 'pdfkit'
 
 import {
     buildProductWhere,
@@ -7,13 +10,6 @@ import {
     productFiltersSchema,
     productStatusLabels,
 } from '../lib/product-filters.js'
-import { PAGE_MARGIN } from '../constants/report-products-pdf.js'
-
-import {
-    drawFooter,
-    drawHeaderReport,
-    drawProductReportRows,
-} from '../functions/product-report.js'
 import { getProductsCursor } from '../functions/get-products-cursor.js'
 
 const currencyFormatter = new Intl.NumberFormat('pt-BR', {
@@ -23,7 +19,7 @@ const currencyFormatter = new Intl.NumberFormat('pt-BR', {
 
 export const productReportsRouter = Router()
 
-productReportsRouter.get('/products/pdf', async (request, response) => {
+productReportsRouter.get('/products/csv', async (request, response) => {
     const result = productFiltersSchema.safeParse(request.query)
 
     if (!result.success) {
@@ -34,73 +30,54 @@ productReportsRouter.get('/products/pdf', async (request, response) => {
 
     const where = buildProductWhere(result.data)
 
-    response.setHeader('Content-Type', 'application/pdf')
-
+    response.setHeader('Content-Type', 'text/csv; charset=utf-8')
     response.setHeader(
         'Content-Disposition',
-        'inline; filename="products-report.pdf"',
+        'attachment; filename="products-report.csv"',
     )
 
-    const pdf = new PDFDocument({
-        size: 'A4',
-        margins: {
-            top: PAGE_MARGIN,
-            right: PAGE_MARGIN,
-            bottom: PAGE_MARGIN,
-            left: PAGE_MARGIN,
-        },
-        info: {
-            Title: 'Relatório de Produtos',
-        },
-    })
+    async function* generateProducts() {
+        let currentCursorId: number | undefined
 
-    pdf.pipe(response)
+        while (true) {
+            const { products, hasNextPage, nextCursorId } =
+                await getProductsCursor(5000, currentCursorId, where)
 
-    let currentCursorId: number | undefined
+            if (products.length === 0) break
 
-    // Desenha a estrutura de header base
-
-    let currentReportState = drawHeaderReport(pdf)
-
-    while (true) {
-        const { products, hasNextPage, nextCursorId } = await getProductsCursor(
-            5000,
-            currentCursorId,
-            where,
-        )
-
-        // Não tem produto nenhum para aqui
-        if (products.length === 0) break
-
-        // Formata os dados para o formato da tabela
-        const rows = products.map((product) => {
-            return {
-                sku: product.sku,
-                name: product.name,
-                category:
-                    productCategoryLabels[product.category] ?? product.category,
-                price: currencyFormatter.format(product.priceInCents / 100),
-                stock: String(product.stock),
-                status: productStatusLabels[product.status],
+            for (const product of products) {
+                yield {
+                    sku: product.sku,
+                    name: product.name,
+                    category:
+                        productCategoryLabels[product.category] ??
+                        product.category,
+                    price: currencyFormatter.format(product.priceInCents / 100),
+                    stock: product.stock,
+                    status:
+                        productStatusLabels[product.status] ?? product.status,
+                }
             }
-        })
 
-        // Desenha as linhas das tabela e atualiza o estado de onde parou
+            if (!hasNextPage) break
 
-        currentReportState = drawProductReportRows(
-            pdf,
-            rows,
-            currentReportState,
-        )
-
-        // Tem outro lote de processamento? Se não para
-        if (!hasNextPage) break
-
-        // Atualiza a ref do ultimo item para continuar o processamento no while
-        currentCursorId = nextCursorId
+            currentCursorId = nextCursorId
+        }
     }
 
-    drawFooter(pdf, currentReportState.pageNumber)
+    const csv = stringify({
+        header: true,
+        bom: true,
+        delimiter: ';',
+        columns: [
+            { key: 'sku', header: 'SKU' },
+            { key: 'name', header: 'Nome' },
+            { key: 'category', header: 'Categoria' },
+            { key: 'price', header: 'Preço' },
+            { key: 'stock', header: 'Estoque' },
+            { key: 'status', header: 'Status' },
+        ],
+    })
 
-    pdf.end()
+    await pipeline(Readable.from(generateProducts()), csv, response)
 })

@@ -39,8 +39,8 @@ export function GenerateReportDialog({
         const queryString = searchParams.toString()
 
         const reportUrl = queryString
-            ? `${apiUrl}/products/pdf?${queryString}`
-            : `${apiUrl}/products/pdf`
+            ? `${apiUrl}/products/csv?${queryString}`
+            : `${apiUrl}/products/csv`
 
         window.open(reportUrl, '_blank', 'noopener,noreferrer')
 
@@ -52,7 +52,7 @@ export function GenerateReportDialog({
             open={open}
             onOpenChange={onOpenChange}
             title="Gerar relatório"
-            description="O relatório será gerado em PDF utilizando os filtros atuais."
+            description="O relatório será baixado em CSV utilizando os filtros atuais."
         >
             <div className="flex justify-end gap-2">
                 <Button
