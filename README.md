@@ -8,9 +8,9 @@ Experimento sobre manipulação e processamento de grandes volumes de dados, uti
 
 Trabalhar com poucos registros permite buscar os dados, mantê-los em memória e processá-los de uma vez. Esse modelo deixa de ser uma boa estratégia quando o volume cresce.
 
-O ReportForge explora como diferentes operações sobre um mesmo dataset podem exigir estratégias diferentes. O experimento utiliza um catálogo de 50.000 produtos e trabalha com dois cenários.
+O ReportForge explora como diferentes operações sobre um mesmo dataset podem exigir estratégias diferentes. O experimento utiliza um catálogo de 200.000 produtos e trabalha com dois cenários.
 
-Para a interface, não é necessário percorrer todos os 50.000 registros. O catálogo é consultado de forma paginada, trazendo apenas os registros necessários para representar a página atual. O usuário navega pelo conjunto gradualmente, sem receber todos os produtos de uma única vez.
+Para a interface, não é necessário percorrer todos os 200.000 registros. O catálogo é consultado de forma paginada, trazendo apenas os registros necessários para representar a página atual. O usuário navega pelo conjunto gradualmente, sem receber todos os produtos de uma única vez.
 
 Para a exportação, é necessário percorrer todo o conjunto correspondente aos filtros selecionados. Isso não significa que todos os registros precisam ser carregados simultaneamente em memória. A API utiliza cursor-based pagination, busca lotes de até 5000 produtos e envia os registros progressivamente para um stream CSV.
 
@@ -44,7 +44,7 @@ O monorepo é organizado com **pnpm workspaces**, contendo `apps/web` e `apps/ap
 
 ## Fluxo de geração do relatório
 
-A exportação percorre todos os produtos correspondentes aos filtros selecionados, mas não espera processar os 50.000 produtos para começar a responder. Assim que um lote é buscado no banco, seus produtos são entregues individualmente pelo async generator para o próximo estágio do pipeline.
+A exportação percorre todos os produtos correspondentes aos filtros selecionados, mas não espera processar os 200.000 produtos para começar a responder. Assim que um lote é buscado no banco, seus produtos são entregues individualmente pelo async generator para o próximo estágio do pipeline.
 
 O fluxo conceitual é:
 
